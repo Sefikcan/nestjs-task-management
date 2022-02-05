@@ -13,7 +13,9 @@ import { TasksService } from './tasks.service';
 export class TasksController {
     private logger = new Logger('TasksController');
 
-    constructor(private taskService: TasksService){}
+    constructor(
+        private taskService: TasksService
+        ){}
 
     @Get()
     getTasks(@Query() filterDto: GetTasksFilterDto, @GetUser() user: User): Promise<Task[]> {
