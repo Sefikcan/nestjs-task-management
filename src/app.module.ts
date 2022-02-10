@@ -4,12 +4,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configValidationSchema } from './config.schema';
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
+    TerminusModule,
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`], //environment bazlı config bilgilerini alacağımız dosyamızı belirttik.
-      validationSchema: configValidationSchema
+      validationSchema: configValidationSchema,
     }),
     TasksModule,
     TypeOrmModule.forRootAsync({
@@ -29,13 +32,13 @@ import { configValidationSchema } from './config.schema';
           port: Number(configService.get('DB_PORT')),
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
-          database: configService.get('DB_DATABASE')
-        }
-      }
+          database: configService.get('DB_DATABASE'),
+        };
+      },
     }),
-    AuthModule
+    AuthModule,
   ],
-  controllers: [],
+  controllers: [HealthController],
   providers: [],
 })
 export class AppModule {}
